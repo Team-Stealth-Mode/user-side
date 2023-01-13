@@ -35,7 +35,7 @@ export default function Home() {
           {auth.user ? (
             <div>
               <p className={styles.code}>Your Social Credit Score is!</p>
-              <h1 className={styles.big}>1000</h1>
+              <h1 className={styles.big}>1500</h1>
             </div>
           ) : (
             <p className={styles.code}>Sign in to see your Social Credit Score</p>
