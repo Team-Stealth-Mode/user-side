@@ -7,6 +7,7 @@ import { getSocialCreditScore } from '../lib/db'
 import useSWR from 'swr'
 
 export default function Home() {
+  const auth = useAuth()
 
   const fetcher = async (...args) => {
     const res = await fetch(...args)
@@ -14,9 +15,8 @@ export default function Home() {
     return res.json()
   }
 
-  const { data } = useSWR('/api/hello', fetcher)
+  const { data } = useSWR(`/api/hello?uid=${auth?.user?.uid}`, fetcher)
   console.log(data)
-  const auth = useAuth()
 
   return (
     <>
