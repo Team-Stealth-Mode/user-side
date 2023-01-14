@@ -2,9 +2,22 @@ import Head from 'next/head'
 import Image from 'next/image'
 import { useAuth } from '../lib/auth'
 import styles from '../styles/Home.module.css'
+import { useEffect, useState } from 'react'
+import { getSocialCreditScore } from '../lib/db'
+import useSWR from 'swr'
 
 export default function Home() {
   const auth = useAuth()
+
+  const fetcher = async (...args) => {
+    const res = await fetch(...args)
+
+    return res.json()
+  }
+
+  const { data } = useSWR(`/api/hello?uid=${auth?.user?.uid}`, fetcher)
+  console.log(data)
+
   return (
     <>
       <Head>
@@ -21,7 +34,7 @@ export default function Home() {
               <Image src="/logout.svg" onClick={(e) => auth.signout()} className={styles.logout} alt="Sign Out" width={20} height={20} />
             </p>
           ) : (
-            <p onClick={(e) => auth.signInWithGoogle()}>
+            <p onClick={(e) => auth.signinWithGoogle()}>
               <code className={styles.code}>Sign In with Google</code>
             </p>
           )}
@@ -35,7 +48,7 @@ export default function Home() {
           {auth.user ? (
             <div>
               <p className={styles.code}>Your Social Credit Score is!</p>
-              <h1 className={styles.big}>1500</h1>
+              <h1 className={styles.big}>{data?.scs}</h1>
             </div>
           ) : (
             <p className={styles.code}>Sign in to see your Social Credit Score</p>

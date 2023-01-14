@@ -1,5 +1,8 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
+import db from "../../lib/firebase-admin"
 
-export default function handler(req, res) {
-  res.status(200).json({ name: 'John Doe' })
+export default async function handler(req, res) {
+  // req param from url
+  const { uid } = req.query;
+  const scs = await db.collection("users").doc(uid).get();
+  res.status(200).json({ scs: scs.data().social_credit_score });
 }
